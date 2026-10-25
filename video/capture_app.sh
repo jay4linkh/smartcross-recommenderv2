@@ -7,7 +7,7 @@ OUT="$(cd "$(dirname "$0")" && pwd)/assets"
 mkdir -p "$OUT"
 shot() {   # name  query
   "$E" --headless=new --disable-gpu --hide-scrollbars --window-size=1600,1000 \
-       --virtual-time-budget=15000 \
+       --virtual-time-budget=15000 --force-prefers-reduced-motion \
        --screenshot="$(cygpath -w "$OUT")\\$1.png" \
        "http://127.0.0.1:8000/static/_capture.html?$2" >/dev/null 2>&1
   echo "  $1.png"
@@ -21,3 +21,5 @@ shot app_recs         "draw=1&el=%23verdict&dy=380"
 shot app_engines      "draw=1&view=engines&node=Content%20engine&el=%23flow&dy=-110"
 shot app_proof        "view=performance&el=%23evidence-box&dy=-10"
 shot app_perf         "view=performance"
+shot app_controls     "draw=1&el=%23regimes&dy=-160"
+shot app_hero         "none=1"

@@ -32,8 +32,11 @@ ROOT = os.path.normpath(os.path.join(HERE, ".."))
 ASSETS = os.path.join(HERE, "assets")
 BUILD = os.path.join(HERE, "build")
 OUT = os.path.join(HERE, "SmartCross_explainer.mp4")
-VOICE = "Microsoft Zira Desktop"      # or "Microsoft David Desktop"
-RATE = 1                               # -10 (slow) .. 10 (fast)
+ENGINE = "edge"                        # "edge": natural neural voice (online) | "sapi": Windows voice (offline)
+EDGE_VOICE = "en-US-AndrewMultilingualNeural"   # also good: en-US-AvaMultilingualNeural, en-IN-PrabhatNeural
+EDGE_RATE = "+4%"
+VOICE = "Microsoft Zira Desktop"      # SAPI fallback: or "Microsoft David Desktop"
+RATE = 1                               # SAPI: -10 (slow) .. 10 (fast)
 GAP = 0.35                             # silence after each sentence, seconds
 SCENE_GAP = 0.5                        # extra silence at the end of a scene
 
@@ -96,128 +99,141 @@ CF_EX = cf_example(CF_HOLD)
 # Each scene: kind, chapter, title, data, and steps of (spoken sentence, reveal).
 SCENES = [
     dict(kind="title", chapter="", title="", data={}, steps=[
-        ("This is SmartCross: a recommender that tells a bank adviser which three products to offer a customer next, and why.", 1),
-        ("In the next few minutes: the data, the attributes the model reads, how the two engines work, and how well it really performs.", 2),
+        ("Imagine walking into your bank, and before you even ask, they already know what you'll need next. That's SmartCross.", 1),
+        ("In the next few minutes: where the data comes from, how the model thinks, and how often it gets it right.", 2),
     ]),
     dict(kind="bullets", chapter="01 · THE PROBLEM", title="Offer the right product, not every product", data={"items": [
-        ("Same list for everyone", "Banks push one generic product list, and most customers ignore it."),
-        ("Existing customers are the cheapest growth", "Selling a second product costs far less than winning a new customer."),
-        ("Our goal", "For each customer: rank the products they are most likely to take next, keep only eligible ones, explain each."),
+        ("Same list for everyone", "Most banks show every customer the same products, and most people ignore them."),
+        ("Existing customers are the cheapest growth", "Selling a second product is far cheaper than finding a brand-new customer."),
+        ("Our goal", "For each customer: the three products they're most likely to want next, only ones they qualify for, each explained."),
     ]}, steps=[
-        ("Banks usually push the same product list to everyone, and most customers ignore it.", 1),
-        ("Yet selling a second product to an existing customer is far cheaper than winning a new one.", 2),
-        ("So the goal is simple: for each customer, rank the products they are most likely to take next, keep only the ones they are eligible for, and explain each one.", 3),
+        ("Today, most banks show everyone the same list of products, and most people simply ignore it.", 1),
+        ("But selling a second product to someone who already banks with you is much cheaper than finding a new customer.", 2),
+        ("So our goal is simple. For every customer, pick the three products they're most likely to want next, skip anything they can't get, and explain why.", 3),
     ]),
     dict(kind="cards", chapter="02 · THE DATA", title="Three sources of data", data={"cards": [
         ("Santander bank", "2.2 GB", ["13.6 million rows", "24 products, month by month", "Jan 2015 – May 2016", "the main dataset"], "violet"),
         ("LendingClub", "1.6 GB", ["2.26 million US loans", "credit attributes", "Part A only:", "the first experiment"], "mute"),
         ("Market prices", "1 MB", ["9 price series", "sector funds, bank stocks", "monthly", "reads the economy"], "sky"),
     ]}, steps=[
-        ("The project uses three sources of data.", 0),
-        ("First, the Santander bank dataset from Kaggle: 2.2 gigabytes and 13.6 million rows, recording which of 24 products each customer held, month by month, from January 2015 to May 2016.", 1),
-        ("Second, LendingClub: 1.6 gigabytes of US loans. We used it only in Part A, as a first experiment.", 2),
-        ("Third, nine market price series, such as sector funds and bank stocks, which tell us whether the economy is booming or under stress.", 3),
+        ("We used three kinds of data.", 0),
+        ("The main one comes from Santander bank: 13.6 million rows, showing which of 24 products each customer had, every single month, for a year and a half.", 1),
+        ("We also tried LendingClub loan data first. More on why it didn't work in a moment.", 2),
+        ("And nine stock market price series, which tell us whether the economy is doing well or struggling.", 3),
     ]),
-    dict(kind="bullets", chapter="02 · THE DATA", title="Part A: why LendingClub was not enough", data={"items": [
+    dict(kind="bullets", chapter="02 · THE DATA", title="Lesson one: credit data isn't enough", data={"items": [
         ("The question", "Can credit data predict which loan a person wants?"),
-        ("The answer: no", "Income, credit score and debt describe how much someone can borrow, not what for. Best model: 1.7 times chance."),
-        ("The lesson", "The problem needs each customer's product history over time. Santander has it."),
+        ("The answer: no", "Income and credit score show how much someone can borrow, not what they want. Barely better than guessing."),
+        ("The lesson", "We need each customer's story over time. Santander has exactly that."),
     ]}, steps=[
-        ("Part A asked whether credit data alone can predict which loan a person wants.", 1),
-        ("It can't. Income, credit score and debt describe how much someone can borrow, not what they want it for. Even the best model reached only 1.7 times chance.", 2),
-        ("That failure is why we moved to Santander, which has what LendingClub lacks: each customer's product history over time.", 3),
+        ("LendingClub only tells you about one loan per person.", 1),
+        ("Income and credit score tell you how much someone can borrow, but not what they actually want. Our best model there was barely better than guessing.", 2),
+        ("What we really needed was each customer's story over time. And that's exactly what Santander has.", 3),
     ]),
-    dict(kind="events", chapter="03 · FROM RAW DATA TO EVENTS", title="Every 'no → yes' is a decision we can learn from", data={}, steps=[
-        ("Here is how the Santander data becomes training data.", 0),
-        ("Each customer has one row per month, with a yes or no flag for every product.", 1),
-        ("When a flag flips from no to yes, that customer has just taken a new product.", 2),
-        (f"Each flip becomes one training example: what they held the month before, who they are, and the product they added. That gives 563,310 acquisition events across 22 products.", 3),
+    dict(kind="events", chapter="03 · FROM RAW DATA TO LESSONS", title="Every 'no → yes' is a lesson", data={}, steps=[
+        ("Here's the trick that turns raw data into something a model can learn from.", 0),
+        ("Every customer has one row per month: a simple yes or no for every product.", 1),
+        ("When a no turns into a yes, that customer just signed up for something new.", 2),
+        ("Each of those moments becomes a lesson: what they had, who they are, and what they picked. We found 563,310 of them.", 3),
     ]),
-    dict(kind="attributes", chapter="04 · THE ATTRIBUTES", title="35 attributes + 3 months of history", data={}, steps=[
-        ("For every event, the model reads 35 attributes.", 0),
-        ("24 of them are simply the products the customer already holds, such as a current account, a payroll account, a credit card or a pension.", 1),
-        ("The other 11 describe the person and their behaviour: age, income, how long they have been with the bank, their segment, whether they are active, how many products they hold, and how recently they last added one.", 2),
-        ("The target is the product they actually added next: one of 22 classes.", 3),
-        ("On top of that, the model sees each customer's recent history: what they held two months ago, so it can spot a product they just dropped, and how many months in a row they have kept each product. That is 48 more features.", 4),
+    dict(kind="attributes", chapter="04 · WHAT THE MODEL LOOKS AT", title="35 clues + 3 months of history", data={}, steps=[
+        ("So what does the model actually look at?", 0),
+        ("First, which products the customer already has, like a current account, a payroll account, or a credit card.", 1),
+        ("Then, who they are: their age, income, how long they've banked here, and how active they are.", 2),
+        ("What it learns to predict: which of 22 products they took next.", 3),
+        ("And new in this version: their recent history. What they had two months ago, and how long they've kept each product. That one idea made the biggest difference of all.", 4),
     ]),
-    dict(kind="timeline", chapter="05 · TRAIN AND TEST", title="Split by time, never at random", data={}, steps=[
-        ("We split the data by time, never at random, so the model can never peek at the future.", 0),
-        (f"It trains on February 2015 to February 2016: {N['train']:,} events.", 1),
-        ("February 2016 also serves as a validation month, used only to choose settings.", 2),
-        (f"And it is tested exactly once, on March to May 2016: {N['test']:,} events it has never seen.", 3),
+    dict(kind="timeline", chapter="05 · A FAIR TEST", title="Study, practice test, final exam", data={}, steps=[
+        ("To keep it honest, we split the data by time, just like a real exam.", 0),
+        (f"The model studies everything from February 2015 to February 2016: {N['train']:,} lessons.", 1),
+        ("February 2016 is the practice test. We only use it to choose settings.", 2),
+        (f"And March to May 2016 is the final exam: {N['test']:,} customers the model has never seen.", 3),
     ]),
-    dict(kind="flow", chapter="06 · THE PIPELINE", title="Four layers, always in this order", data={}, steps=[
-        ("The system is a pipeline of four layers.", 0),
-        ("First, the customer becomes a profile: 35 numbers, plus three months of history.", 1),
-        ("Second, two engines score all 22 products.", 2),
-        ("Third, the economy nudges the scores.", 3),
-        ("Fourth, eligibility rules remove anything the customer cannot have.", 4),
-        ("What is left is the top three, each with a reason.", 5),
+    dict(kind="flow", chapter="06 · HOW IT WORKS", title="Four steps, always in this order", data={}, steps=[
+        ("The whole system works in four steps.", 0),
+        ("First, it builds a profile of the customer, including their recent history.", 1),
+        ("Second, two engines score every product.", 2),
+        ("Third, it checks the economy.", 3),
+        ("Fourth, it removes anything the customer isn't allowed to get.", 4),
+        ("What's left is the top three, each with a reason a person can understand.", 5),
     ]),
-    dict(kind="cf", chapter="07 · ENGINE 1 — COLLABORATIVE", title="What did customers like you add next?", data={}, steps=[
-        ("The first engine is collaborative filtering. It ignores who the customer is, and asks: what did other customers with exactly this portfolio add next?", 1),
-        (f"For example, among customers holding a current account, a payroll account and direct debit, the most common next products were {CF_EX[0][0]} and {CF_EX[1][0]}.", 2),
-        ("If a portfolio is rare, the engine leans back on simpler single-product patterns, so it never trusts a handful of people.", 3),
-        (f"Our first version ranked by lift, which rewards surprising but rare products. It reached only {N['cf_old']*100:.0f} percent top three. Ranking by probability instead raised it to {N['cf']*100:.0f} percent.", 4),
+    dict(kind="cf", chapter="07 · ENGINE 1 — THE CROWD", title="What did people like you do next?", data={}, steps=[
+        ("Engine one asks a really simple question: what did people like you do next?", 1),
+        (f"For example, people with a current account, a payroll account and direct debit most often went on to add {CF_EX[0][0]} or {CF_EX[1][0]}.", 2),
+        ("If almost nobody shares your exact combination, it falls back on simpler patterns, so it never trusts just a handful of people.", 3),
+        (f"Our first version chased rare, surprising products and was right only {N['cf_old']*100:.0f} percent of the time. Once we fixed that, it's right {N['cf']*100:.0f} percent of the time.", 4),
     ]),
-    dict(kind="fusion", chapter="08 · ENGINE 2 — CONTENT, FUSED", title="Fusion, not averaging", data={}, steps=[
-        ("The second engine is the content engine: a gradient boosting model, an ensemble of small decision trees.", 1),
-        ("It reads the 35 profile attributes, the 48 history features, and the 44 scores from the collaborative engine: 127 inputs in total.", 2),
-        ("This is called feature fusion. Instead of averaging the two engines, the model learns, for each customer, how much to trust the peers.", 3),
-        ("That matters, because our first hybrid simply averaged them fifty-fifty, and it was measurably worse than the content engine on its own.", 4),
+    dict(kind="fusion", chapter="08 · ENGINE 2 — THE BRAIN", title="Learning when to trust the crowd", data={}, steps=[
+        ("Engine two is the clever one: a machine-learning model made of thousands of small decision trees.", 1),
+        ("It reads everything: the profile, the recent history, and engine one's opinion. That's 127 clues in total.", 2),
+        ("Instead of just averaging the two engines, it learns when to trust the crowd, and when to trust the person in front of it.", 3),
+        ("Our first attempt simply averaged them, and it actually made things worse. Lesson learned.", 4),
     ]),
-    dict(kind="macro", chapter="09 · LAYER 3 — THE ECONOMY", title="The economy gets a vote", data={}, steps=[
-        ("The third layer reads the economy.", 0),
-        ("Nine price series each vote on the market's momentum and volatility, and the majority sets one of four regimes: expansion, recovery, slowdown or stress.", 1),
-        ("Each regime gently tilts product scores. In stress, safe products like current accounts rise, and investment funds fall.", 2),
-        (f"It changes the top recommendation for only {N['tilt']*100:.1f} percent of customers. It is there for business sense, not accuracy, and we say so.", 3),
+    dict(kind="macro", chapter="09 · STEP 3 — THE ECONOMY", title="The economy gets a vote", data={}, steps=[
+        ("Step three: the economy gets a vote.", 0),
+        ("Nine market signals vote on whether we're in a boom, a recovery, a slowdown, or a period of stress.", 1),
+        ("In tough times, safe products move up the list, and risky ones move down.", 2),
+        (f"It changes the top pick for only {N['tilt']*100:.1f} percent of customers. It's there for good sense, not for accuracy, and we say so.", 3),
     ]),
-    dict(kind="rules", chapter="10 · LAYER 4 — ELIGIBILITY", title="Rules remove, never down-weight", data={}, steps=[
-        ("The fourth layer is eligibility.", 0),
-        ("Thirteen readable rules. For example, a mortgage needs age 25 to 65, an income of at least 30,000, and two years with the bank.", 1),
-        ("A product that fails a rule is removed, not just pushed down, and missing data never counts as a pass.", 2),
-        (f"This has a cost: the rules remove the product the customer actually took {N['removed']*100:.1f} percent of the time, and we report that openly.", 3),
+    dict(kind="rules", chapter="10 · STEP 4 — THE RULES", title="If you don't qualify, it's gone", data={}, steps=[
+        ("Step four: the rules.", 0),
+        ("Thirteen simple rules. For example, a mortgage needs an age between 25 and 65, an income of at least 30,000, and two years with the bank.", 1),
+        ("If you don't qualify, the product is removed, not just pushed down. And missing information never counts as a yes.", 2),
+        (f"That has a cost: about {N['removed']*100:.0f} percent of the time, the rules remove the very thing the customer bought. We report that openly.", 3),
     ]),
-    dict(kind="image", chapter="11 · ONE REAL CUSTOMER", title="A real customer, scored live", data={"img": "app_story_engine.png"}, steps=[
-        ("Here is a real customer from the test months, drawn at random by the app.", 1),
-        ("The bars show every product's score at each stage: what peers did, what the content engine concluded, and the economy's nudge, with the regime's boosts marked in yellow.", 1),
-        ("At the end, the app checks the recommendation against what this customer actually did next.", 1),
+    dict(kind="image", chapter="11 · SEE IT WORKING", title="Open the app", data={"img": "app_hero.png"}, steps=[
+        ("Now let's see it working. Run the app, open it in your browser, and this is the first screen.", 1),
+        ("At the top: how often it's right, how many real customers you can test it on, and how many products it ranks.", 1),
     ]),
-    dict(kind="image", chapter="12 · THE APP", title="Why this answer, in plain words", data={"img": "app_why.png"}, steps=[
-        ("The app shows this for any customer: what we recommend and why, what was removed and by which rule, and what else was considered.", 1),
-        ("An adviser can also slide between the content engine and the raw peer opinion, and watch the ranking change live.", 1),
+    dict(kind="image", chapter="11 · SEE IT WORKING", title="Scroll: a customer walks in", data={"img": "app_story_walk.png"}, steps=[
+        ("Scroll down, and a real customer from the final exam walks into the bank. As you keep scrolling, you follow them through every step.", 1),
     ]),
-    dict(kind="image", chapter="12 · THE APP", title="Inside the engines", data={"img": "app_engines.png"}, steps=[
-        ("The Inside the Engines view shows the whole architecture, with a measured number on every box, and exactly which months were used for training and testing.", 1),
+    dict(kind="image", chapter="11 · SEE IT WORKING", title="Watch the engines decide", data={"img": "app_story_engine.png"}, steps=[
+        ("You can watch each step change the scores: what the crowd said, what the model concluded, and the economy's little nudge.", 1),
+        ("And at the end, the app checks its answer against what this customer really did next.", 1),
     ]),
-    dict(kind="bars", chapter="13 · RESULTS", title="Right product in our top three?", data={}, steps=[
-        (f"Now the results, on the {N['test']:,} test events. The question is: was the product they actually took among our three suggestions?", 1),
-        (f"Picking three products at random would succeed about 14 percent of the time. Always recommending the most popular products gets {N['pop']*100:.1f} percent.", 2),
-        (f"The improved collaborative engine alone reaches {N['cf']*100:.1f} percent, and the content engine {N['content']*100:.1f}.", 3),
-        (f"Fusing the two, without history, reached {N['nh']*100:.1f} percent.", 4),
-        (f"Adding three months of holdings history raises it to {N['fused']*100:.1f} percent, the best of all. After the economy and the rules, the full system still gets {N['pipe']*100:.1f} percent.", 5),
-        (f"Its macro F1 score, which weighs rare products as much as common ones, is {N['f1']:.3f}: almost eight times the chance level.", 6),
+    dict(kind="image", chapter="11 · SEE IT WORKING", title="Draw a real customer", data={"img": "app_recs.png"}, steps=[
+        ("Further down, press Draw a real customer. The app picks someone it has never seen, and shows its three recommendations, each with a reason and a score.", 1),
+        ("At the top it tells you straight away whether it got it right, by comparing with what that customer actually did.", 1),
     ]),
-    dict(kind="compare", chapter="13 · RESULTS", title="What three months of history added", data={}, steps=[
-        ("Here is what the history features added, on the same test customers.", 1),
-        (f"The first suggestion is now right {N['top1']*100:.1f} percent of the time, up from {N['nh_top1']*100:.1f}.", 2),
-        (f"And macro F1, the fairness score across rare products, rose from {N['nh_f1']:.3f} to {N['f1']:.3f}: a gain of about 28 percent.", 3),
+    dict(kind="image", chapter="11 · SEE IT WORKING", title="Why this answer", data={"img": "app_why.png"}, steps=[
+        ("Then read Why this answer: what we recommend and why, what was removed and by which rule, and what else was considered, all in plain English.", 1),
     ]),
-    dict(kind="image", chapter="14 · IS IT REAL?", title="Is the improvement real?", data={"img": "app_proof.png"}, steps=[
-        ("Are these gains real, or luck? We resampled the test customers a thousand times, and compared every engine on identical samples.", 1),
-        ("Every gain from the history features is real: the confidence interval excludes zero for top one, top three and macro F1.", 1),
-        ("We also tried a hyperparameter search, per-product thresholds and XGBoost on the GPU. Each was judged on the validation month, none beat the chosen model, and all three are reported.", 1),
-        ("Results are stable across all three test months, and the model is well calibrated: when it says 60 percent, it is right about 60 percent of the time.", 1),
+    dict(kind="image", chapter="11 · SEE IT WORKING", title="Change anything, watch it update", data={"img": "app_controls.png"}, steps=[
+        ("On the left, you can change anything about the customer: tick the products they hold, or edit their age, income or segment.", 1),
+        ("Further down are controls for the economy, and a slider between the model and the crowd. Change any of them, and the recommendations update live, with a note telling you what moved.", 1),
     ]),
-    dict(kind="summary", chapter="SUMMARY", title="SmartCross in one slide", data={"items": [
-        ("Two engines, fused, plus history", "Collaborative + content + 3 months of holdings, from 563,310 decisions"),
-        ("Economy + eligibility on top", "Every recommendation checked and explained"),
-        (f"{pc(N['pipe'])} end-to-end top three", "vs about 14% random and 70.5% for the popularity list"),
+    dict(kind="image", chapter="11 · SEE IT WORKING", title="Inside the engines", data={"img": "app_engines.png"}, steps=[
+        ("Finally, Inside the Engines shows the whole system at a glance, with a real, measured number on every box.", 1),
+    ]),
+    dict(kind="bars", chapter="13 · HOW GOOD IS IT?", title="Right product in our top three?", data={}, steps=[
+        ("So, how good is it? Was the product they actually bought in our top three?", 1),
+        (f"Picking three products at random would be right about 14 percent of the time. Just recommending the most popular products gets {N['pop']*100:.0f} percent.", 2),
+        (f"The crowd engine alone gets {N['cf']*100:.0f} percent, and the profile model alone {N['content']*100:.0f}.", 3),
+        (f"Combining the two, without history, also gets {N['nh']*100:.0f}.", 4),
+        (f"Add the customer's recent history, and it climbs past {N['fused']*100:.0f} percent. Even after the strict rules, the full system is right {N['pipe']*100:.0f} percent of the time.", 5),
+        ("And on rare products, which are the hardest, it does almost eight times better than chance.", 6),
+    ]),
+    dict(kind="compare", chapter="13 · HOW GOOD IS IT?", title="What three months of history added", data={}, steps=[
+        ("Here's what that one idea, the customer's history, really added.", 1),
+        (f"The very first suggestion is now right {N['top1']*100:.1f} percent of the time, up from {N['nh_top1']*100:.1f}.", 2),
+        ("And on rare products, the score improved by 28 percent.", 3),
+    ]),
+    dict(kind="image", chapter="14 · IS IT REAL?", title="Real, or just luck?", data={"img": "app_proof.png"}, steps=[
+        ("But is this real, or just luck?", 1),
+        ("We re-checked the results a thousand different ways, and every gain from history held up every time.", 1),
+        ("We also tried four other ideas, including training on a graphics card. None of them beat this model, and we report every one of them.", 1),
+        ("It's steady from month to month, and when it says it's 60 percent sure, it's right about 60 percent of the time.", 1),
+    ]),
+    dict(kind="summary", chapter="IN SHORT", title="SmartCross in one slide", data={"items": [
+        ("Two engines + recent history", "The crowd and the model, working together, learned from 563,310 real decisions"),
+        ("Economy check + strict rules", "Every suggestion checked, and explained in plain English"),
+        (f"{pc(N['pipe'])} right in the top three", "vs about 14% by chance and 70.5% for the popular list"),
     ]}, steps=[
-        ("To sum up.", 0),
-        ("Two engines, fused rather than averaged, reading three months of each customer's history, learned from 563 thousand real product decisions.", 1),
-        ("An economy layer and hard eligibility rules on top, with every recommendation explained.", 2),
-        (f"And {N['pipe']*100:.1f} percent of the time, the product the customer actually took next is in our top three. Thank you.", 3),
+        ("So, in short.", 0),
+        ("Two engines working together, plus each customer's recent history, learned from 563 thousand real decisions.", 1),
+        ("A common-sense economy check and strict rules on top, with every suggestion explained.", 2),
+        (f"And {N['pipe']*100:.0f} percent of the time, what the customer actually bought next was right there in our top three. That's SmartCross. Thanks for watching.", 3),
     ]),
 ]
 
@@ -439,8 +455,7 @@ def arrow(d, x0, y0, x1, y1, on=True, col="lav"):
 
 
 def r_flow(img, d, data, rv):
-    items = [("Profile", "35 numbers
-+ 48 history", "lav"), ("Two engines", "collaborative +\ncontent, fused", "violet"),
+    items = [("Profile", "35 numbers\n+ 48 history", "lav"), ("Two engines", "collaborative +\ncontent, fused", "violet"),
              ("Economy", "regime tilts\nthe scores", "sky"), ("Rules", "remove what they\ncannot have", "rose"),
              ("Top 3", "each with\na reason", "mint")]
     bw, gap, y0 = 290, 62, 420
@@ -486,7 +501,7 @@ def r_cf(img, d, data, rv):
 
 
 def r_fusion(img, d, data, rv):
-    box(d, (110, 300, 560, 470), "35 profile + 48 history", "holdings, who they are, how they got here", "lav", rv >= 2)
+    box(d, (110, 300, 560, 470), "35 profile + 48 history", "who they are + their history", "lav", rv >= 2)
     box(d, (110, 560, 560, 730), "44 peer scores", "from the collaborative engine", "violet", rv >= 2)
     box(d, (720, 380, 1250, 650), "Content engine", "gradient boosting\nreads all 127 inputs", "bright", rv >= 1, 44)
     box(d, (1410, 430, 1810, 600), "22 scores", "one per product", "mint", rv >= 1)
@@ -621,6 +636,37 @@ RENDER = dict(title=r_title, bullets=r_bullets, cards=r_cards, events=r_events, 
 
 # ================================================================== speech
 def speak(items):
+    """items: [(text, wav_path)] -> one wav per sentence, natural voice or Windows."""
+    if ENGINE == "edge":
+        return speak_edge(items)
+    return speak_sapi(items)
+
+
+def speak_edge(items):
+    """Microsoft neural voice via edge-tts (online), converted to one wav format."""
+    import asyncio
+    import edge_tts
+    import imageio_ffmpeg
+    ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+    tsv = os.path.join(BUILD, "lines.tsv")
+    body = f"{EDGE_VOICE}|{EDGE_RATE}\n" + "".join(path + "\t" + text + "\n" for text, path in items)
+    if (os.path.exists(tsv) and open(tsv, encoding="utf-8").read() == body
+            and all(os.path.exists(p) for _, p in items)):
+        print("  narration unchanged -- reusing the recorded voice")
+        return
+
+    async def run():
+        for text, path in items:
+            mp3 = path[:-4] + ".mp3"
+            await edge_tts.Communicate(text, EDGE_VOICE, rate=EDGE_RATE).save(mp3)
+            subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-i", mp3, "-ar", "24000", "-ac", "1",
+                            "-sample_fmt", "s16", path], check=True)
+    asyncio.run(run())
+    with open(tsv, "w", encoding="utf-8") as f:
+        f.write(body)
+
+
+def speak_sapi(items):
     """items: [(text, wav_path)] -> Windows speech, offline, one run."""
     tsv = os.path.join(BUILD, "lines.tsv")
     body = "".join(path + "\t" + text.replace("\t", " ") + "\n" for text, path in items)

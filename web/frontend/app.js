@@ -83,7 +83,7 @@
     if (REDUCED) { fn(1); return; }
     var t0 = performance.now();
     (function step(t) {
-      var p = Math.min(1, (t - t0) / ms);
+      var p = Math.max(0, Math.min(1, (t - t0) / ms));   // the first rAF stamp can precede t0
       fn(1 - Math.pow(1 - p, 3));
       if (p < 1) requestAnimationFrame(step);
     })(t0);

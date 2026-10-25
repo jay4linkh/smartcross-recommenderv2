@@ -1,0 +1,299 @@
+1
+00:00:00,000 --> 00:00:06,984
+Imagine walking into your bank, and before you even ask, they already know what you'll need next. That's SmartCross.
+
+2
+00:00:07,333 --> 00:00:13,021
+In the next few minutes: where the data comes from, how the model thinks, and how often it gets it right.
+
+3
+00:00:13,871 --> 00:00:19,631
+Today, most banks show everyone the same list of products, and most people simply ignore it.
+
+4
+00:00:19,981 --> 00:00:26,797
+But selling a second product to someone who already banks with you is much cheaper than finding a new customer.
+
+5
+00:00:27,147 --> 00:00:36,555
+So our goal is simple. For every customer, pick the three products they're most likely to want next, skip anything they can't get, and explain why.
+
+6
+00:00:37,405 --> 00:00:39,518
+We used three kinds of data.
+
+7
+00:00:39,868 --> 00:00:49,707
+The main one comes from Santander bank: 13.6 million rows, showing which of 24 products each customer had, every single month, for a year and a half.
+
+8
+00:00:50,057 --> 00:00:55,170
+We also tried LendingClub loan data first. More on why it didn't work in a moment.
+
+9
+00:00:55,519 --> 00:01:00,919
+And nine stock market price series, which tell us whether the economy is doing well or struggling.
+
+10
+00:01:01,769 --> 00:01:05,465
+LendingClub only tells you about one loan per person.
+
+11
+00:01:05,816 --> 00:01:13,808
+Income and credit score tell you how much someone can borrow, but not what they actually want. Our best model there was barely better than guessing.
+
+12
+00:01:14,158 --> 00:01:20,037
+What we really needed was each customer's story over time. And that's exactly what Santander has.
+
+13
+00:01:20,888 --> 00:01:25,304
+Here's the trick that turns raw data into something a model can learn from.
+
+14
+00:01:25,654 --> 00:01:31,078
+Every customer has one row per month: a simple yes or no for every product.
+
+15
+00:01:31,428 --> 00:01:35,676
+When a no turns into a yes, that customer just signed up for something new.
+
+16
+00:01:36,026 --> 00:01:44,882
+Each of those moments becomes a lesson: what they had, who they are, and what they picked. We found 563,310 of them.
+
+17
+00:01:45,732 --> 00:01:47,724
+So what does the model actually look at?
+
+18
+00:01:48,074 --> 00:01:54,746
+First, which products the customer already has, like a current account, a payroll account, or a credit card.
+
+19
+00:01:55,096 --> 00:02:00,928
+Then, who they are: their age, income, how long they've banked here, and how active they are.
+
+20
+00:02:01,278 --> 00:02:05,262
+What it learns to predict: which of 22 products they took next.
+
+21
+00:02:05,612 --> 00:02:15,140
+And new in this version: their recent history. What they had two months ago, and how long they've kept each product. That one idea made the biggest difference of all.
+
+22
+00:02:15,990 --> 00:02:19,998
+To keep it honest, we split the data by time, just like a real exam.
+
+23
+00:02:20,348 --> 00:02:30,116
+The model studies everything from February 2015 to February 2016: 459,137 lessons.
+
+24
+00:02:30,466 --> 00:02:35,938
+February 2016 is the practice test. We only use it to choose settings.
+
+25
+00:02:36,288 --> 00:02:44,616
+And March to May 2016 is the final exam: 104,167 customers the model has never seen.
+
+26
+00:02:45,466 --> 00:02:48,058
+The whole system works in four steps.
+
+27
+00:02:48,408 --> 00:02:53,112
+First, it builds a profile of the customer, including their recent history.
+
+28
+00:02:53,462 --> 00:02:56,462
+Second, two engines score every product.
+
+29
+00:02:56,812 --> 00:02:58,731
+Third, it checks the economy.
+
+30
+00:02:59,082 --> 00:03:02,946
+Fourth, it removes anything the customer isn't allowed to get.
+
+31
+00:03:03,296 --> 00:03:07,760
+What's left is the top three, each with a reason a person can understand.
+
+32
+00:03:08,610 --> 00:03:13,386
+Engine one asks a really simple question: what did people like you do next?
+
+33
+00:03:13,736 --> 00:03:21,512
+For example, people with a current account, a payroll account and direct debit most often went on to add pensions or payroll.
+
+34
+00:03:21,862 --> 00:03:28,870
+If almost nobody shares your exact combination, it falls back on simpler patterns, so it never trusts just a handful of people.
+
+35
+00:03:29,220 --> 00:03:38,484
+Our first version chased rare, surprising products and was right only 31 percent of the time. Once we fixed that, it's right 85 percent of the time.
+
+36
+00:03:39,334 --> 00:03:45,526
+Engine two is the clever one: a machine-learning model made of thousands of small decision trees.
+
+37
+00:03:45,876 --> 00:03:54,396
+It reads everything: the profile, the recent history, and engine one's opinion. That's 127 clues in total.
+
+38
+00:03:54,746 --> 00:04:01,634
+Instead of just averaging the two engines, it learns when to trust the crowd, and when to trust the person in front of it.
+
+39
+00:04:01,984 --> 00:04:07,456
+Our first attempt simply averaged them, and it actually made things worse. Lesson learned.
+
+40
+00:04:08,306 --> 00:04:11,066
+Step three: the economy gets a vote.
+
+41
+00:04:11,416 --> 00:04:18,376
+Nine market signals vote on whether we're in a boom, a recovery, a slowdown, or a period of stress.
+
+42
+00:04:18,726 --> 00:04:23,694
+In tough times, safe products move up the list, and risky ones move down.
+
+43
+00:04:24,044 --> 00:04:32,492
+It changes the top pick for only 1.6 percent of customers. It's there for good sense, not for accuracy, and we say so.
+
+44
+00:04:33,342 --> 00:04:35,262
+Step four: the rules.
+
+45
+00:04:35,612 --> 00:04:45,980
+Thirteen simple rules. For example, a mortgage needs an age between 25 and 65, an income of at least 30,000, and two years with the bank.
+
+46
+00:04:46,330 --> 00:04:53,314
+If you don't qualify, the product is removed, not just pushed down. And missing information never counts as a yes.
+
+47
+00:04:53,664 --> 00:05:01,800
+That has a cost: about 11 percent of the time, the rules remove the very thing the customer bought. We report that openly.
+
+48
+00:05:02,650 --> 00:05:07,954
+Now let's see it working. Run the app, open it in your browser, and this is the first screen.
+
+49
+00:05:08,304 --> 00:05:14,784
+At the top: how often it's right, how many real customers you can test it on, and how many products it ranks.
+
+50
+00:05:15,634 --> 00:05:23,889
+Scroll down, and a real customer from the final exam walks into the bank. As you keep scrolling, you follow them through every step.
+
+51
+00:05:24,740 --> 00:05:31,364
+You can watch each step change the scores: what the crowd said, what the model concluded, and the economy's little nudge.
+
+52
+00:05:31,713 --> 00:05:36,874
+And at the end, the app checks its answer against what this customer really did next.
+
+53
+00:05:37,723 --> 00:05:47,491
+Further down, press Draw a real customer. The app picks someone it has never seen, and shows its three recommendations, each with a reason and a score.
+
+54
+00:05:47,841 --> 00:05:53,457
+At the top it tells you straight away whether it got it right, by comparing with what that customer actually did.
+
+55
+00:05:54,307 --> 00:06:02,731
+Then read Why this answer: what we recommend and why, what was removed and by which rule, and what else was considered, all in plain English.
+
+56
+00:06:03,581 --> 00:06:11,213
+On the left, you can change anything about the customer: tick the products they hold, or edit their age, income or segment.
+
+57
+00:06:11,563 --> 00:06:22,627
+Further down are controls for the economy, and a slider between the model and the crowd. Change any of them, and the recommendations update live, with a note telling you what moved.
+
+58
+00:06:23,477 --> 00:06:30,941
+Finally, Inside the Engines shows the whole system at a glance, with a real, measured number on every box.
+
+59
+00:06:31,791 --> 00:06:35,679
+So, how good is it? Was the product they actually bought in our top three?
+
+60
+00:06:36,029 --> 00:06:44,477
+Picking three products at random would be right about 14 percent of the time. Just recommending the most popular products gets 70 percent.
+
+61
+00:06:44,827 --> 00:06:50,659
+The crowd engine alone gets 85 percent, and the profile model alone 89.
+
+62
+00:06:51,009 --> 00:06:55,113
+Combining the two, without history, also gets 89.
+
+63
+00:06:55,463 --> 00:07:04,632
+Add the customer's recent history, and it climbs past 90 percent. Even after the strict rules, the full system is right 85 percent of the time.
+
+64
+00:07:04,981 --> 00:07:10,309
+And on rare products, which are the hardest, it does almost eight times better than chance.
+
+65
+00:07:11,159 --> 00:07:15,119
+Here's what that one idea, the customer's history, really added.
+
+66
+00:07:15,469 --> 00:07:21,805
+The very first suggestion is now right 63.5 percent of the time, up from 58.9.
+
+67
+00:07:22,155 --> 00:07:26,283
+And on rare products, the score improved by 28 percent.
+
+68
+00:07:27,133 --> 00:07:29,125
+But is this real, or just luck?
+
+69
+00:07:29,475 --> 00:07:35,571
+We re-checked the results a thousand different ways, and every gain from history held up every time.
+
+70
+00:07:35,921 --> 00:07:44,081
+We also tried four other ideas, including training on a graphics card. None of them beat this model, and we report every one of them.
+
+71
+00:07:44,431 --> 00:07:51,223
+It's steady from month to month, and when it says it's 60 percent sure, it's right about 60 percent of the time.
+
+72
+00:07:52,073 --> 00:07:53,945
+So, in short.
+
+73
+00:07:54,295 --> 00:08:02,263
+Two engines working together, plus each customer's recent history, learned from 563 thousand real decisions.
+
+74
+00:08:02,613 --> 00:08:07,989
+A common-sense economy check and strict rules on top, with every suggestion explained.
+
+75
+00:08:08,339 --> 00:08:16,235
+And 85 percent of the time, what the customer actually bought next was right there in our top three. That's SmartCross. Thanks for watching.
