@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartCross</title>
+<link rel="stylesheet" href="/static/app.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236d28d9'/%3E%3Cpath d='M8 21 L14 13 L19 18 L25 9' stroke='%23ffffff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='25' cy='9' r='2.8' fill='%23ffffff'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="shell">
+
+  <aside class="rail">
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+        <rect x="1" y="1" width="34" height="34" rx="10" fill="#6d28d9"/>
+        <path d="M8 25 L15 15 L21 20 L28 10" stroke="#ffffff" stroke-width="2.4"
+              fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="28" cy="10" r="3" fill="#ffffff"/>
+        <circle cx="15" cy="15" r="1.8" fill="#c4b5fd"/>
+        <circle cx="21" cy="20" r="1.8" fill="#c4b5fd"/>
+      </svg>
+      <span>
+        <b>SmartCross</b>
+        <em>cross-sell intelligence</em>
+      </span>
+    </div>
+
+    <nav class="nav" aria-label="Sections">
+      <button data-view="advise" aria-current="page"><i></i>Advise</button>
+      <button data-view="engines"><i></i>Inside the engines</button>
+      <button data-view="performance"><i></i>Performance</button>
+      <button data-view="evidence"><i></i>Evidence</button>
+      <button data-view="session"><i></i>Session <span id="sess-count" class="muted small"></span></button>
+    </nav>
+
+    <div class="rail-foot">
+      <span class="chip"><span class="dot" id="api-dot"></span><span id="api-name">Connecting…</span></span>
+      <span class="chip"><span class="dot" id="model-dot"></span><span id="model-name">Loading model…</span></span>
+      <span class="foot-note">Four engines in order: profile &rarr; fused peers &rarr; macro tilt &rarr; eligibility. Runs entirely on this computer.</span>
+    </div>
+  </aside>
+
+  <main>
+    <div class="banner" id="banner" hidden></div>
+
+    <!-- =========================== ADVISE =========================== -->
+    <section class="view active" id="view-advise" aria-labelledby="h-advise">
+      <div class="hero">
+        <div class="hero-in">
+          <div class="hero-copy">
+            <h1 id="h-advise">Know what to offer<br>before they ask.</h1>
+            <p>One customer profile in. Three products out, ranked, each one checked against the
+              rules and explained in a sentence a person can repeat at the counter.</p>
+            <div class="hero-stats">
+              <div><b id="hs-top3">&mdash;</b><span>right product in the top three</span></div>
+              <div><b id="hs-pool">&mdash;</b><span>real customers to test on</span></div>
+              <div><b id="hs-prod">&mdash;</b><span>products ranked every time</span></div>
+            </div>
+          </div>
+          <!-- Original illustration. To use a photograph instead, replace this
+               whole <svg> with <img src="/static/hero.jpg" alt="">. -->
+          <div class="hero-art">
+            <svg viewBox="0 0 300 250" role="img" aria-label="A customer holding a bank card">
+              <defs>
+                <linearGradient id="coat" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#6d28d9"/>
+                </linearGradient>
+                <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9cdfb"/>
+                </linearGradient>
+              </defs>
+              <ellipse cx="150" cy="243" rx="86" ry="9" fill="#1b0b38" opacity=".35"/>
+              <!-- raised arm holding the card -->
+              <path d="M186 150 C204 134, 212 110, 208 86" stroke="url(#coat)"
+                    stroke-width="21" fill="none" stroke-linecap="round"/>
+              <g transform="rotate(-14 208 74)">
+                <rect x="190" y="52" width="40" height="26" rx="4" fill="url(#card)"/>
+                <rect x="190" y="60" width="40" height="5" fill="#6d28d9" opacity=".55"/>
+                <rect x="195" y="69" width="11" height="5" rx="1.4" fill="#8b5cf6"/>
+              </g>
+              <circle cx="208" cy="82" r="8.5" fill="#f0c9a8"/>
+              <!-- body -->
+              <path d="M112 250 L112 168 Q112 142 150 142 Q188 142 188 168 L188 250 Z"
+                    fill="url(#coat)"/>
+              <path d="M114 150 C98 162, 92 188, 95 212" stroke="url(#coat)"
+                    stroke-width="21" fill="none" stroke-linecap="round"/>
+              <circle cx="95" cy="216" r="8.5" fill="#f0c9a8"/>
+              <path d="M133 148 L150 166 L167 148" fill="#fff" opacity=".22"/>
+              <!-- head -->
+              <path d="M126 92 Q126 58 150 58 Q174 58 174 92 L174 104 Q174 124 150 124
+                       Q126 124 126 104 Z" fill="#f3d2b3"/>
+              <path d="M150 50 Q182 50 180 90 Q178 74 168 70 Q156 80 132 76
+                       Q124 82 122 94 Q116 52 150 50 Z" fill="#2a1250"/>
+              <path d="M122 94 Q118 128 126 146 L134 142 Q126 120 128 98 Z" fill="#2a1250"/>
+              <path d="M178 92 Q184 126 176 146 L168 142 Q176 120 174 96 Z" fill="#2a1250"/>
+              <circle cx="139" cy="97" r="2.6" fill="#2a1250"/>
+              <circle cx="161" cy="97" r="2.6" fill="#2a1250"/>
+              <path d="M143 109 Q150 114 157 109" stroke="#2a1250" stroke-width="2.2"
+                    fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- One real held-out customer walks into the bank; scrolling carries
+           them through the four engines. Driven by story.js. -->
+      <section class="story" id="story" aria-label="Follow one customer through the four engines">
+        <div class="story-stage">
+          <svg id="story-svg" viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid meet"
+               role="img" aria-label="A customer walks into the bank and through the recommendation pipeline"></svg>
+          <div class="story-cap" aria-live="polite">
+            <div class="cap"><b>A customer walks into the bank.</b>
+              <span>Every adviser has the same three seconds: what do I offer this person? Scroll to follow them.</span></div>
+            <div class="cap"><b>They step inside.</b>
+              <span>This is a real customer from the held&#8209;out months. The model never saw them in training.</span></div>
+            <div class="cap"><b>Their record becomes a profile.</b>
+              <span>24 product flags, 11 behaviour and demographic signals, and 3 months of holdings history.</span></div>
+            <div class="cap"><b>Engine 1 &mdash; what peers did next.</b>
+              <span>Collaborative filtering: what did customers with exactly this portfolio add next?</span></div>
+            <div class="cap"><b>Engine 2 &mdash; the content engine decides.</b>
+              <span>Gradient boosting reads the whole profile <em>and</em> the peers' scores, and learns how far to trust them.</span></div>
+            <div class="cap"><b>Engine 3 &mdash; the economy gets a vote.</b>
+              <span>The macro regime, classified from real price series, nudges the ranking up or down.</span></div>
+            <div class="cap"><b>Engine 4 &mdash; rules remove, never down&#8209;weight.</b>
+              <span>What they cannot be offered is taken off the list, with the reason. Then three products remain &mdash;
+                checked against what this customer actually did next.</span></div>
+          </div>
+          <div class="story-tools">
+            <button type="button" class="story-again">Another customer</button>
+            <button type="button" class="story-skip">Skip to the console &darr;</button>
+          </div>
+          <div class="story-progress" aria-hidden="true"><i></i></div>
+          <div class="story-hint" aria-hidden="true">scroll</div>
+        </div>
+      </section>
+
+      <div class="view-head" id="advise-start" style="margin-top:28px">
+        <div>
+          <h2>Advise a customer</h2>
+          <p class="muted">Draw a real one from the held&#8209;out data, or enter a profile by hand.</p>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btn-replay" hidden>Replay walk&#8209;through</button>
+          <button class="btn" id="btn-reset">Clear</button>
+          <button class="btn primary" id="btn-run">Advise <span class="kbd">&#9166;</span></button>
+        </div>
+      </div>
+
+      <div class="advise">
+        <!-- ---------------- intake form ---------------- -->
+        <form class="card intake" id="intake" autocomplete="off">
+          <div class="intake-head">
+            <h2>Customer</h2>
+          </div>
+          <div class="intake-head">
+            <button type="button" class="btn wide" id="btn-random">
+              Draw a real customer from the held&#8209;out data
+            </button>
+          </div>
+
+          <div class="grid2">
+            <label>Name<input id="f-name" placeholder="optional"></label>
+            <label>Age<input id="f-age" type="number" min="18" max="100" value="34"></label>
+          </div>
+          <label class="full">Annual income
+            <div class="range-row">
+              <input id="f-income-r" type="range" min="0" max="250000" step="1000" value="52000">
+              <input id="f-income" type="number" min="0" step="1000" value="52000">
+            </div>
+          </label>
+          <div class="grid2">
+            <label>Months with the bank<input id="f-sen" type="number" min="0" value="48"></label>
+            <label>Segment
+              <select id="f-seg">
+                <option>Individual</option><option>VIP</option><option>College</option>
+              </select>
+            </label>
+          </div>
+          <div class="grid2">
+            <label>Months since last product<input id="f-msl" type="number" min="-1" value="7"></label>
+            <label>Products taken so far<input id="f-acq" type="number" min="0" value="3"></label>
+          </div>
+          <div class="flags">
+            <label class="check"><input type="checkbox" id="f-active" checked> Active customer</label>
+            <label class="check"><input type="checkbox" id="f-new"> Joined recently</label>
+            <label class="check"><input type="checkbox" id="f-male"> Male</label>
+          </div>
+
+          <div class="examples">
+            <span>Or try a worked example:</span>
+            <div class="seg small" role="group" aria-label="Load a worked example">
+              <button type="button" data-persona="rahul">Peer match</button>
+              <button type="button" data-persona="aman">Next step</button>
+              <button type="button" data-persona="vikram">Guardrails</button>
+            </div>
+          </div>
+
+          <div class="sep"><span>Products already held</span></div>
+          <div class="holdings" id="holdings"></div>
+
+          <div class="sep"><span>Engine controls</span></div>
+          <label class="full">Macro regime
+            <div class="regimes" id="regimes"></div>
+          </label>
+          <p class="muted small" id="regime-note"></p>
+          <label class="full">Peer mix &alpha; &mdash; content engine vs. raw peer scores
+            <div class="range-row">
+              <input id="f-alpha" type="range" min="0" max="100" value="100">
+              <output id="alpha-out" class="num">1.00</output>
+            </div>
+          </label>
+          <p class="small alpha-meaning" id="alpha-meaning" aria-live="polite"></p>
+        </form>
+
+        <!-- ---------------- verdict ---------------- -->
+        <div class="verdict" id="verdict">
+          <div class="empty-verdict card">
+            <h2>Waiting for a profile</h2>
+            <ol>
+              <li>Holdings, behaviour and 3 months of holdings history become the profile vector.</li>
+              <li>The collaborative engine scores all 22 products from what customers with the same portfolio did next; a
+                gradient&#8209;boosting model reads those scores beside the profile and makes the call.</li>
+              <li>The macro regime tilts the ranking toward what the cycle favours.</li>
+              <li>Hard eligibility rules <em>remove</em> what the customer cannot have &mdash; they are never merely
+                down&#8209;weighted.</li>
+            </ol>
+            <p class="muted small">Press <b>Advise</b>, or draw a real customer from the panel on the left.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================== ENGINES =========================== -->
+    <section class="view" id="view-engines" aria-labelledby="h-eng">
+      <div class="view-head">
+        <div>
+          <h1 id="h-eng">Inside the engines</h1>
+          <p class="muted">The real pipeline, stage by stage. Select a stage to see exactly what it did to the profile
+            currently loaded.</p>
+        </div>
+      </div>
+      <svg class="flow" id="flow" viewBox="0 0 1280 402" role="group" aria-label="Pipeline architecture"></svg>
+      <p class="flow-note">Scoring happens before filtering. Filtering first would bias the probabilities;
+        tilting last would promote products the customer cannot have. The hard constraint runs last so nothing
+        downstream can re-admit an ineligible product.</p>
+      <div class="inside">
+        <div class="card" id="stage-text"></div>
+        <div class="card" id="stage-viz"></div>
+      </div>
+    </section>
+
+    <!-- =========================== PERFORMANCE =========================== -->
+    <section class="view" id="view-performance" aria-labelledby="h-perf">
+      <div class="view-head">
+        <div>
+          <h1 id="h-perf">How well it ranks</h1>
+          <p class="muted" id="perf-sub">Measured on the last three months, held out entirely. The model only ever saw
+            earlier months &mdash; including when the lift matrix was computed.</p>
+        </div>
+        <button class="btn" id="btn-reload-perf">Reload results</button>
+      </div>
+      <div id="perf-body"></div>
+    </section>
+
+    <!-- =========================== EVIDENCE =========================== -->
+    <section class="view" id="view-evidence" aria-labelledby="h-ev">
+      <div class="view-head">
+        <div>
+          <h1 id="h-ev">What the data actually says</h1>
+          <p class="muted">Every reason the console gives traces back to one of these measured sequence rules. Lift is
+            how much more often a product is taken by people who already hold another, against its own base rate.</p>
+        </div>
+      </div>
+      <div id="ev-body"></div>
+    </section>
+
+    <!-- =========================== SESSION =========================== -->
+    <section class="view" id="view-session" aria-labelledby="h-sess">
+      <div class="view-head">
+        <div>
+          <h1 id="h-sess">This session's advice</h1>
+          <p class="muted">Open any record to review the full cascade. Records live in memory until the server stops.</p>
+        </div>
+      </div>
+      <div id="sess-body"></div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/static/app.js"></script>
+<script src="/static/story.js"></script>
+</body>
+</html>

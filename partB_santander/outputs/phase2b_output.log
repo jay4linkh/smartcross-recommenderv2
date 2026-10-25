@@ -1,0 +1,208 @@
+
+==============================================================================
+PHASE 4.5b : FIRST ANALYSIS OF SANTANDER DATA
+==============================================================================
+
+Reading /sessions/rcw-01sxgfj7eqgqa7ytcifyjwed/santander_english.csv ...
+Loaded 2,725,768 rows x 49 columns
+Products: 24
+Customers: 191,102
+Months   : 17  (2015-01-28 -> 2016-05-28)
+
+==============================================================================
+1. PORTFOLIO SIZE - how many products per customer
+==============================================================================
+
+  mean   1.30 products
+  median 1
+  max    13
+
+  distribution:
+     0 products    51,324  #################################
+     1 products    90,988  ############################################################
+     2 products    24,134  ###############
+     3 products     9,602  ######
+     4 products     5,783  ###
+     5 products     3,582  ##
+     6 products     2,576  #
+     7 products     1,642  #
+     8 products       905  
+     9 products       354  
+    10 products       149  
+    11 products        45  
+
+  Customers holding 2+ products: 48,790 (25.5%)
+  -> THIS is what LendingClub could not give us. Every LendingClub
+     customer had exactly one product, so there was nothing to
+     cross-sell from.
+
+==============================================================================
+2. PRODUCT OWNERSHIP - imbalance check
+==============================================================================
+
+  product                             holders  % of base
+  --------------------------------------------------------
+  current_account                     112,423     58.83%
+  direct_debit                         22,654     11.85%
+  particular_account                   20,066     10.50%
+  e_account                            15,170      7.94%
+  payroll_account                      14,566      7.62%
+  pensions                             10,586      5.54%
+  payroll                               9,635      5.04%
+  taxes                                 9,563      5.00%
+  credit_card                           7,013      3.67%
+  particular_plus_account               6,589      3.45%
+  long_term_deposits                    6,310      3.30%
+  securities                            4,260      2.23%
+  funds                                 2,968      1.55%
+  mas_particular_account                1,607      0.84%
+  pension_plan                          1,471      0.77%
+  junior_account                        1,441      0.75%
+  mortgage                                940      0.49%
+  home_account                            607      0.32%
+  loans                                   452      0.24%
+  medium_term_deposits                    216      0.11%
+  short_term_deposits                      71      0.04%
+  derivatives_account                      58      0.03%
+  savings_account                          14      0.01%
+  guarantees                                3      0.00%
+
+  Imbalance ratio: 37474 : 1
+  Same discipline as Phase 2 applies - do not let the common
+  products swamp the rare ones.
+
+==============================================================================
+3. ACQUISITION EVENTS - the 0 -> 1 flips  (THE KEY NUMBER)
+==============================================================================
+
+  A customer who did NOT hold a product last month and DOES
+  hold it this month = one cross-sell event. This is the thing
+  LendingClub structurally could not produce.
+
+  product                            acquisitions
+  ------------------------------------------------
+  direct_debit                             30,610
+  pensions                                 16,838
+  payroll                                  14,620
+  current_account                          13,908
+  credit_card                              13,658
+  payroll_account                           7,310
+  e_account                                 5,233
+  long_term_deposits                        2,593
+  taxes                                     1,882
+  mas_particular_account                    1,427
+  securities                                  989
+  particular_account                          755
+  funds                                       751
+  short_term_deposits                         643
+  particular_plus_account                     495
+  pension_plan                                116
+  junior_account                               97
+  medium_term_deposits                         53
+  loans                                        25
+  derivatives_account                          23
+  home_account                                 19
+  mortgage                                     16
+  guarantees                                    1
+  savings_account                               1
+
+  TOTAL ACQUISITION EVENTS: 112,063
+  Customers with 1+ acquisition: 40,285
+
+  VERDICT: plenty of cross-sell events to learn from.
+           The switch to Santander was worth it.
+
+  Saved santander_acquisitions.csv (89,193 rows)
+
+==============================================================================
+4. CO-OCCURRENCE - which products are held together
+==============================================================================
+
+  P(hold B | hold A) - strongest pairs:
+
+  if customer holds              they also hold                   prob
+  ----------------------------------------------------------------------
+  payroll                        pensions                       100.0%
+  payroll                        payroll_account                93.0%
+  pensions                       payroll_account                92.7%
+  pensions                       payroll                        91.0%
+  mortgage                       direct_debit                   87.2%
+  medium_term_deposits           current_account                81.5%
+  payroll                        direct_debit                   77.6%
+  pensions                       direct_debit                   77.2%
+  credit_card                    direct_debit                   72.3%
+  securities                     current_account                72.3%
+  payroll_account                direct_debit                   70.9%
+  funds                          current_account                69.7%
+  long_term_deposits             current_account                69.6%
+  payroll_account                pensions                       67.4%
+  particular_account             current_account                66.0%
+  mortgage                       payroll_account                61.6%
+  payroll_account                payroll                        61.5%
+  taxes                          direct_debit                   59.0%
+  home_account                   current_account                58.6%
+  credit_card                    payroll_account                57.1%
+
+==============================================================================
+5. SEQUENCE RULES - 'after X, customers add Y'
+==============================================================================
+
+  This is Example B from your spec: 'customers who take a
+  mortgage add insurance within 60 days'. We can finally test it.
+
+  Ranked by LIFT = confidence / base rate.
+  Lift 1.0 means the rule tells you nothing you didn't already know
+  from the product's overall popularity. Higher is a real pattern.
+
+  already had                then added                 conf   base   lift
+  --------------------------------------------------------------------------
+  short_term_deposits        long_term_deposits        7.5%  0.2% 40.67x  (194/2,593)
+  mas_particular_account     e_account                29.3%  0.9% 32.51x  (1,535/5,233)
+  short_term_deposits        e_account                 4.7%  0.2% 25.45x  (245/5,233)
+  short_term_deposits        current_account           2.4%  0.2% 12.90x  (330/13,908)
+  long_term_deposits         funds                    40.2%  4.1%  9.75x  (302/751)
+  payroll_account            pensions                 67.6%  7.5%  8.96x  (11,382/16,838)
+  payroll_account            payroll                  65.4%  7.5%  8.67x  (9,564/14,620)
+  credit_card                particular_plus_account  31.3%  4.2%  7.40x  (155/495)
+  taxes                      particular_plus_account  34.9%  4.9%  7.09x  (173/495)
+  pensions                   payroll_account          38.1%  5.5%  6.88x  (2,787/7,310)
+  payroll                    payroll_account          34.8%  5.1%  6.82x  (2,541/7,310)
+  payroll                    particular_plus_account  34.7%  5.1%  6.82x  (172/495)
+  pension_plan               securities                5.9%  0.9%  6.77x  (58/989)
+  pensions                   particular_plus_account  37.2%  5.5%  6.71x  (184/495)
+  payroll                    credit_card              32.6%  5.1%  6.40x  (4,454/13,658)
+  pensions                   credit_card              35.1%  5.5%  6.33x  (4,794/13,658)
+  mortgage                   credit_card               3.6%  0.6%  6.23x  (486/13,658)
+  credit_card                securities               25.8%  4.2%  6.09x  (255/989)
+  payroll_account            credit_card              45.1%  7.5%  5.98x  (6,162/13,658)
+  direct_debit               particular_plus_account  70.1% 11.9%  5.87x  (347/495)
+
+  Rules with lift >= 1.2x : 175
+  -> real cross-sell patterns exist beyond raw popularity.
+
+  Saved phase4_5_products.png
+  Saved phase4_5_cooccurrence.png
+  Saved phase4_5_analysis.json
+
+==============================================================================
+WHAT THIS MEANS FOR THE PROJECT
+==============================================================================
+
+  LendingClub                        Santander
+  ----------------------------------------------------------------
+  1 product per customer             1.3 products per customer
+  no acquisition history             112,063 acquisition events
+  no user x item matrix              191,102 x 24 matrix
+  Example A only (as a proxy)        Examples A and B both buildable
+
+  Phases 1-4 showed the popularity baseline could not be beaten, because
+  loan PURPOSE was not in the features. Here the question is different:
+  given what a customer already holds, what comes next. The co-occurrence
+  and sequence tables above are the evidence that signal exists.
+
+  Next: Phase 5 builds the real collaborative filtering model on this.
+
+
+==============================================================================
+PHASE 4.5b COMPLETE  (19s)
+==============================================================================

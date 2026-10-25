@@ -1,0 +1,370 @@
+{
+  "n_rows": 2725768,
+  "n_customers": 191102,
+  "n_months": 17,
+  "n_products": 24,
+  "portfolio": {
+    "mean": 1.3013102950256932,
+    "median": 1.0,
+    "max": 13,
+    "pct_multi_product": 25.5308683320949
+  },
+  "ownership": {
+    "current_account": 112423,
+    "direct_debit": 22654,
+    "particular_account": 20066,
+    "e_account": 15170,
+    "payroll_account": 14566,
+    "pensions": 10586,
+    "payroll": 9635,
+    "taxes": 9563,
+    "credit_card": 7013,
+    "particular_plus_account": 6589,
+    "long_term_deposits": 6310,
+    "securities": 4260,
+    "funds": 2968,
+    "mas_particular_account": 1607,
+    "pension_plan": 1471,
+    "junior_account": 1441,
+    "mortgage": 940,
+    "home_account": 607,
+    "loans": 452,
+    "medium_term_deposits": 216,
+    "short_term_deposits": 71,
+    "derivatives_account": 58,
+    "savings_account": 14,
+    "guarantees": 3
+  },
+  "acquisitions": {
+    "direct_debit": 30610,
+    "pensions": 16838,
+    "payroll": 14620,
+    "current_account": 13908,
+    "credit_card": 13658,
+    "payroll_account": 7310,
+    "e_account": 5233,
+    "long_term_deposits": 2593,
+    "taxes": 1882,
+    "mas_particular_account": 1427,
+    "securities": 989,
+    "particular_account": 755,
+    "funds": 751,
+    "short_term_deposits": 643,
+    "particular_plus_account": 495,
+    "pension_plan": 116,
+    "junior_account": 97,
+    "medium_term_deposits": 53,
+    "loans": 25,
+    "derivatives_account": 23,
+    "home_account": 19,
+    "mortgage": 16,
+    "guarantees": 1,
+    "savings_account": 1
+  },
+  "total_acquisition_events": 112063,
+  "cooccurrence_top": [
+    {
+      "if_holds": "payroll",
+      "also_holds": "pensions",
+      "probability": 1.0,
+      "n": 9635
+    },
+    {
+      "if_holds": "payroll",
+      "also_holds": "payroll_account",
+      "probability": 0.9304618578100675,
+      "n": 8965
+    },
+    {
+      "if_holds": "pensions",
+      "also_holds": "payroll_account",
+      "probability": 0.9269790289061024,
+      "n": 9813
+    },
+    {
+      "if_holds": "pensions",
+      "also_holds": "payroll",
+      "probability": 0.9101643680332515,
+      "n": 9635
+    },
+    {
+      "if_holds": "mortgage",
+      "also_holds": "direct_debit",
+      "probability": 0.8723404255319149,
+      "n": 820
+    },
+    {
+      "if_holds": "medium_term_deposits",
+      "also_holds": "current_account",
+      "probability": 0.8148148148148148,
+      "n": 176
+    },
+    {
+      "if_holds": "payroll",
+      "also_holds": "direct_debit",
+      "probability": 0.775609756097561,
+      "n": 7473
+    },
+    {
+      "if_holds": "pensions",
+      "also_holds": "direct_debit",
+      "probability": 0.7723408275080295,
+      "n": 8176
+    },
+    {
+      "if_holds": "credit_card",
+      "also_holds": "direct_debit",
+      "probability": 0.7232282903179809,
+      "n": 5072
+    },
+    {
+      "if_holds": "securities",
+      "also_holds": "current_account",
+      "probability": 0.7227699530516432,
+      "n": 3079
+    },
+    {
+      "if_holds": "payroll_account",
+      "also_holds": "direct_debit",
+      "probability": 0.7093230811478787,
+      "n": 10332
+    },
+    {
+      "if_holds": "funds",
+      "also_holds": "current_account",
+      "probability": 0.6967654986522911,
+      "n": 2068
+    },
+    {
+      "if_holds": "long_term_deposits",
+      "also_holds": "current_account",
+      "probability": 0.6957210776545166,
+      "n": 4390
+    },
+    {
+      "if_holds": "payroll_account",
+      "also_holds": "pensions",
+      "probability": 0.6736921598242482,
+      "n": 9813
+    },
+    {
+      "if_holds": "particular_account",
+      "also_holds": "current_account",
+      "probability": 0.6595734077544104,
+      "n": 13235
+    },
+    {
+      "if_holds": "mortgage",
+      "also_holds": "payroll_account",
+      "probability": 0.6159574468085106,
+      "n": 579
+    },
+    {
+      "if_holds": "payroll_account",
+      "also_holds": "payroll",
+      "probability": 0.6154743924207058,
+      "n": 8965
+    },
+    {
+      "if_holds": "taxes",
+      "also_holds": "direct_debit",
+      "probability": 0.5897730837603262,
+      "n": 5640
+    },
+    {
+      "if_holds": "home_account",
+      "also_holds": "current_account",
+      "probability": 0.586490939044481,
+      "n": 356
+    },
+    {
+      "if_holds": "credit_card",
+      "also_holds": "payroll_account",
+      "probability": 0.5705119064594325,
+      "n": 4001
+    }
+  ],
+  "sequence_rules_top": [
+    {
+      "had": "short_term_deposits",
+      "then_added": "long_term_deposits",
+      "confidence": 0.07481681450057848,
+      "base_rate": 0.0018394815699648687,
+      "lift": 40.672772003911604,
+      "n": 194,
+      "of": 2593
+    },
+    {
+      "had": "mas_particular_account",
+      "then_added": "e_account",
+      "confidence": 0.29333078540034396,
+      "base_rate": 0.00902387877471597,
+      "lift": 32.50606448994287,
+      "n": 1535,
+      "of": 5233
+    },
+    {
+      "had": "short_term_deposits",
+      "then_added": "e_account",
+      "confidence": 0.04681826867953373,
+      "base_rate": 0.0018394815699648687,
+      "lift": 25.45188244556747,
+      "n": 245,
+      "of": 5233
+    },
+    {
+      "had": "short_term_deposits",
+      "then_added": "current_account",
+      "confidence": 0.02372735116479724,
+      "base_rate": 0.0018394815699648687,
+      "lift": 12.898933891058444,
+      "n": 330,
+      "of": 13908
+    },
+    {
+      "had": "long_term_deposits",
+      "then_added": "funds",
+      "confidence": 0.4021304926764314,
+      "base_rate": 0.04125552871704415,
+      "lift": 9.747311576940152,
+      "n": 302,
+      "of": 751
+    },
+    {
+      "had": "payroll_account",
+      "then_added": "pensions",
+      "confidence": 0.6759710179356218,
+      "base_rate": 0.07547781029053097,
+      "lift": 8.955890682753754,
+      "n": 11382,
+      "of": 16838
+    },
+    {
+      "had": "payroll_account",
+      "then_added": "payroll",
+      "confidence": 0.654172366621067,
+      "base_rate": 0.07547781029053097,
+      "lift": 8.6670819424015,
+      "n": 9564,
+      "of": 14620
+    },
+    {
+      "had": "credit_card",
+      "then_added": "particular_plus_account",
+      "confidence": 0.31313131313131315,
+      "base_rate": 0.042339993719201344,
+      "lift": 7.395639102074475,
+      "n": 155,
+      "of": 495
+    },
+    {
+      "had": "taxes",
+      "then_added": "particular_plus_account",
+      "confidence": 0.34949494949494947,
+      "base_rate": 0.04928005611629457,
+      "lift": 7.09201606163326,
+      "n": 173,
+      "of": 495
+    },
+    {
+      "had": "pensions",
+      "then_added": "payroll_account",
+      "confidence": 0.3812585499316005,
+      "base_rate": 0.05543575241913472,
+      "lift": 6.877484895469765,
+      "n": 2787,
+      "of": 7310
+    },
+    {
+      "had": "payroll",
+      "then_added": "payroll_account",
+      "confidence": 0.3476060191518468,
+      "base_rate": 0.050969488232307375,
+      "lift": 6.819884429043849,
+      "n": 2541,
+      "of": 7310
+    },
+    {
+      "had": "payroll",
+      "then_added": "particular_plus_account",
+      "confidence": 0.3474747474747475,
+      "base_rate": 0.050969488232307375,
+      "lift": 6.817308933749469,
+      "n": 172,
+      "of": 495
+    },
+    {
+      "had": "pension_plan",
+      "then_added": "securities",
+      "confidence": 0.05864509605662285,
+      "base_rate": 0.008663980206679365,
+      "lift": 6.768840031676354,
+      "n": 58,
+      "of": 989
+    },
+    {
+      "had": "pensions",
+      "then_added": "particular_plus_account",
+      "confidence": 0.3717171717171717,
+      "base_rate": 0.05543575241913472,
+      "lift": 6.705368927018773,
+      "n": 184,
+      "of": 495
+    },
+    {
+      "had": "payroll",
+      "then_added": "credit_card",
+      "confidence": 0.3261092400058574,
+      "base_rate": 0.050969488232307375,
+      "lift": 6.398126630574068,
+      "n": 4454,
+      "of": 13658
+    },
+    {
+      "had": "pensions",
+      "then_added": "credit_card",
+      "confidence": 0.3510030751208083,
+      "base_rate": 0.05543575241913472,
+      "lift": 6.331709407801829,
+      "n": 4794,
+      "of": 13658
+    },
+    {
+      "had": "mortgage",
+      "then_added": "credit_card",
+      "confidence": 0.03558354078195929,
+      "base_rate": 0.005708116024547944,
+      "lift": 6.233850298229939,
+      "n": 486,
+      "of": 13658
+    },
+    {
+      "had": "credit_card",
+      "then_added": "securities",
+      "confidence": 0.25783619817997977,
+      "base_rate": 0.042339993719201344,
+      "lift": 6.0896607564457454,
+      "n": 255,
+      "of": 989
+    },
+    {
+      "had": "payroll_account",
+      "then_added": "credit_card",
+      "confidence": 0.45116415287743444,
+      "base_rate": 0.07547781029053097,
+      "lift": 5.977440934505158,
+      "n": 6162,
+      "of": 13658
+    },
+    {
+      "had": "direct_debit",
+      "then_added": "particular_plus_account",
+      "confidence": 0.701010101010101,
+      "base_rate": 0.11941661946284497,
+      "lift": 5.870289279359576,
+      "n": 347,
+      "of": 495
+    }
+  ],
+  "n_rules_lift_above_1_2": 175
+}

@@ -1,0 +1,198 @@
+{
+  "protocol": {
+    "fit_months_lt": 13,
+    "valid_month": 13,
+    "test_months_ge": 14,
+    "criterion": "validation top-3, macro F1 breaks ties within 0.1 pts"
+  },
+  "history_validation": {
+    "served (79)": {
+      "top1": 0.5312805673296381,
+      "top3": 0.8918935441799805,
+      "map7": 0.7138306492306736,
+      "macro_f1": 0.24467951709945082
+    },
+    "+ history (127)": {
+      "top1": 0.6066596022171503,
+      "top3": 0.9145745027714379,
+      "map7": 0.7645936680019252,
+      "macro_f1": 0.34321229557279076
+    }
+  },
+  "history_kept": true,
+  "grid": [
+    {
+      "name": "served settings",
+      "params": {
+        "max_iter": 300,
+        "max_depth": 10,
+        "learning_rate": 0.1,
+        "l2_regularization": 1.0
+      },
+      "top1": 0.6066596022171503,
+      "top3": 0.9145745027714379,
+      "map7": 0.7645936680019252,
+      "macro_f1": 0.34321229557279076,
+      "n_iter": 83
+    },
+    {
+      "name": "slower, longer",
+      "params": {
+        "max_iter": 800,
+        "max_depth": 10,
+        "learning_rate": 0.05,
+        "l2_regularization": 1.0
+      },
+      "top1": 0.6061501467231822,
+      "top3": 0.914350342354092,
+      "map7": 0.7643438892511685,
+      "macro_f1": 0.3378232170108466,
+      "n_iter": 174
+    },
+    {
+      "name": "wider trees",
+      "params": {
+        "max_iter": 300,
+        "max_depth": null,
+        "max_leaf_nodes": 63,
+        "learning_rate": 0.1,
+        "l2_regularization": 1.0
+      },
+      "top1": 0.6061909031626997,
+      "top3": 0.9138408868601239,
+      "map7": 0.7640943530982657,
+      "macro_f1": 0.32799861944979747,
+      "n_iter": 69
+    },
+    {
+      "name": "wider + slower",
+      "params": {
+        "max_iter": 800,
+        "max_depth": null,
+        "max_leaf_nodes": 63,
+        "learning_rate": 0.05,
+        "l2_regularization": 1.0
+      },
+      "top1": 0.6069041408542549,
+      "top3": 0.9150432018258885,
+      "map7": 0.7646780435356406,
+      "macro_f1": 0.32984467797097505,
+      "n_iter": 126
+    },
+    {
+      "name": "bigger leaves",
+      "params": {
+        "max_iter": 300,
+        "max_depth": 10,
+        "learning_rate": 0.1,
+        "l2_regularization": 1.0,
+        "min_samples_leaf": 100
+      },
+      "top1": 0.6071486794913596,
+      "top3": 0.9142484512552983,
+      "map7": 0.7647368492555157,
+      "macro_f1": 0.3378710423080279,
+      "n_iter": 100
+    },
+    {
+      "name": "less regularised",
+      "params": {
+        "max_iter": 300,
+        "max_depth": 10,
+        "learning_rate": 0.1,
+        "l2_regularization": 0.0
+      },
+      "top1": 0.5429572872513857,
+      "top3": 0.9024698402347571,
+      "map7": 0.7259861117580388,
+      "macro_f1": 0.2690858910168727,
+      "n_iter": 11
+    }
+  ],
+  "chosen_params": {
+    "name": "served settings",
+    "max_iter": 300,
+    "max_depth": 10,
+    "learning_rate": 0.1,
+    "l2_regularization": 1.0
+  },
+  "thresholds": {
+    "weights": {
+      "current_account": 1.2,
+      "derivatives_account": 5.0,
+      "payroll_account": 1.0,
+      "junior_account": 1.2,
+      "mas_particular_account": 1.5,
+      "particular_account": 1.5,
+      "particular_plus_account": 2.0,
+      "short_term_deposits": 1.0,
+      "medium_term_deposits": 1.0,
+      "long_term_deposits": 1.5,
+      "e_account": 1.0,
+      "funds": 3.0,
+      "mortgage": 1.0,
+      "pension_plan": 3.0,
+      "loans": 3.0,
+      "taxes": 5.0,
+      "credit_card": 1.0,
+      "securities": 2.0,
+      "home_account": 2.0,
+      "payroll": 1.2,
+      "pensions": 1.0,
+      "direct_debit": 0.7
+    },
+    "validation_without": {
+      "top1": 0.6066596022171503,
+      "top3": 0.9145745027714379,
+      "map7": 0.7645936680019252,
+      "macro_f1": 0.34321229557279076,
+      "n_iter": 83
+    },
+    "validation_with": {
+      "top1": 0.6013408868601239,
+      "top3": 0.9074013694163677,
+      "map7": 0.7591516644153585,
+      "macro_f1": 0.3920721585802771
+    },
+    "kept": false
+  },
+  "test": {
+    "served": {
+      "top1": 0.5887949158562693,
+      "top3": 0.8897155529102306,
+      "map7": 0.7442647954955115,
+      "macro_f1": 0.2769973949291271
+    },
+    "improved": {
+      "top1": 0.6351435675405839,
+      "top3": 0.9042979062467,
+      "map7": 0.7748923546301795,
+      "macro_f1": 0.3550233051646451
+    },
+    "paired": {
+      "top1": {
+        "diff": 0.04634865168431461,
+        "ci": [
+          0.04367794023059126,
+          0.048851123676404234
+        ]
+      },
+      "top3": {
+        "diff": 0.014582353336469324,
+        "ci": [
+          0.013326917353864468,
+          0.015874269202338552
+        ]
+      },
+      "macro_f1": {
+        "diff": 0.07802591023551797,
+        "ci": [
+          0.06849037394273867,
+          0.09099198443368221
+        ]
+      }
+    },
+    "improved_n_iter": 97
+  },
+  "runtime_seconds": 1511
+}

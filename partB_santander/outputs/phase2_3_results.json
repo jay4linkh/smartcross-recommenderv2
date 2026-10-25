@@ -1,0 +1,182 @@
+{
+  "step": "2.3",
+  "dataset": "santander",
+  "test_from": "2016-03-01",
+  "n_train_events": 91344,
+  "n_test_events": 20634,
+  "n_products": 18,
+  "product_names": [
+    "credit_card",
+    "current_account",
+    "direct_debit",
+    "e_account",
+    "funds",
+    "junior_account",
+    "long_term_deposits",
+    "mas_particular_account",
+    "medium_term_deposits",
+    "particular_account",
+    "particular_plus_account",
+    "payroll",
+    "payroll_account",
+    "pension_plan",
+    "pensions",
+    "securities",
+    "short_term_deposits",
+    "taxes"
+  ],
+  "dropped_products": [
+    "derivatives_account",
+    "guarantees",
+    "home_account",
+    "loans",
+    "mortgage",
+    "savings_account"
+  ],
+  "random_chance_macro_f1": 0.05555555555555555,
+  "best_alpha": 0.6,
+  "results": [
+    {
+      "model": "POPULARITY (no ML)",
+      "macro_f1": 0.028322838187338356,
+      "weighted_f1": 0.13276073032273752,
+      "top1": 0.2929630706600756,
+      "top3": 0.5750702723659978,
+      "top5": 0.8123000872346612,
+      "map7": 0.48518441592007333,
+      "dead_classes": 17
+    },
+    {
+      "model": "ITEM-ITEM CF",
+      "macro_f1": 0.05985243918834599,
+      "weighted_f1": 0.10888597292976017,
+      "top1": 0.09086943879034604,
+      "top3": 0.2537559368033343,
+      "top5": 0.5476882814771736,
+      "map7": 0.24207387714220993,
+      "dead_classes": 8
+    },
+    {
+      "model": "CLASSIFIER (HistGB)",
+      "macro_f1": 0.305702130009351,
+      "weighted_f1": 0.5479764475364776,
+      "top1": 0.585344576911893,
+      "top3": 0.8781137927692159,
+      "top5": 0.9543956576524183,
+      "map7": 0.7388716958141467,
+      "dead_classes": 4
+    },
+    {
+      "model": "HYBRID best (a=0.6)",
+      "macro_f1": 0.30975750793655465,
+      "weighted_f1": 0.5452525312206036,
+      "top1": 0.5832606377823011,
+      "top3": 0.8686633711350199,
+      "top5": 0.9373848987108656,
+      "map7": 0.7317516858444669,
+      "dead_classes": 4
+    }
+  ],
+  "alpha_sweep": [
+    {
+      "alpha": 0.0,
+      "model": "HYBRID a=0.0",
+      "macro_f1": 0.05985243918834599,
+      "weighted_f1": 0.10888597292976017,
+      "top1": 0.09086943879034604,
+      "top3": 0.2537559368033343,
+      "top5": 0.5476882814771736,
+      "map7": 0.24207387714220993,
+      "dead_classes": 8
+    },
+    {
+      "alpha": 0.2,
+      "model": "HYBRID a=0.2",
+      "macro_f1": 0.24710460989749292,
+      "weighted_f1": 0.5195711243977214,
+      "top1": 0.558544150431327,
+      "top3": 0.7983910051371522,
+      "top5": 0.8588737035960066,
+      "map7": 0.688312747799524,
+      "dead_classes": 4
+    },
+    {
+      "alpha": 0.3,
+      "model": "HYBRID a=0.3",
+      "macro_f1": 0.3053777809644443,
+      "weighted_f1": 0.5371190877675032,
+      "top1": 0.5767180381893962,
+      "top3": 0.8353688087622371,
+      "top5": 0.8995347484733934,
+      "map7": 0.713083814508661,
+      "dead_classes": 4
+    },
+    {
+      "alpha": 0.4,
+      "model": "HYBRID a=0.4",
+      "macro_f1": 0.3080057528211316,
+      "weighted_f1": 0.5418065081367358,
+      "top1": 0.5807405253465154,
+      "top3": 0.8545604342347581,
+      "top5": 0.91804788213628,
+      "map7": 0.722906714299578,
+      "dead_classes": 4
+    },
+    {
+      "alpha": 0.5,
+      "model": "HYBRID a=0.5",
+      "macro_f1": 0.3090213827882266,
+      "weighted_f1": 0.5438507649597198,
+      "top1": 0.58195211786372,
+      "top3": 0.8630900455558786,
+      "top5": 0.9278375496752932,
+      "map7": 0.727839742080819,
+      "dead_classes": 4
+    },
+    {
+      "alpha": 0.6,
+      "model": "HYBRID a=0.6",
+      "macro_f1": 0.30975750793655465,
+      "weighted_f1": 0.5452525312206036,
+      "top1": 0.5832606377823011,
+      "top3": 0.8686633711350199,
+      "top5": 0.9373848987108656,
+      "map7": 0.7317516858444669,
+      "dead_classes": 4
+    },
+    {
+      "alpha": 0.7,
+      "model": "HYBRID a=0.7",
+      "macro_f1": 0.30829937518224454,
+      "weighted_f1": 0.5464297326272555,
+      "top1": 0.5839875932926238,
+      "top3": 0.8725404671900746,
+      "top5": 0.945381409324416,
+      "map7": 0.7346980480667842,
+      "dead_classes": 4
+    },
+    {
+      "alpha": 0.8,
+      "model": "HYBRID a=0.8",
+      "macro_f1": 0.3069160233693718,
+      "weighted_f1": 0.5468967052137278,
+      "top1": 0.5845206940001939,
+      "top3": 0.8767568091499467,
+      "top5": 0.9498885334884172,
+      "map7": 0.7368748759560294,
+      "dead_classes": 4
+    },
+    {
+      "alpha": 1.0,
+      "model": "HYBRID a=1.0",
+      "macro_f1": 0.305702130009351,
+      "weighted_f1": 0.5479764475364776,
+      "top1": 0.585344576911893,
+      "top3": 0.8781137927692159,
+      "top5": 0.9543956576524183,
+      "map7": 0.7388716958141467,
+      "dead_classes": 4
+    }
+  ],
+  "top3_margin_over_popularity": 0.29359309876902207
+}

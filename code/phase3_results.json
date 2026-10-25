@@ -1,0 +1,88 @@
+{
+  "phase": 3,
+  "rows_used": 500000,
+  "n_classes": 13,
+  "class_names": [
+    "car",
+    "credit_card",
+    "debt_consolidation",
+    "home_improvement",
+    "house",
+    "major_purchase",
+    "medical",
+    "moving",
+    "other",
+    "renewable_energy",
+    "small_business",
+    "vacation",
+    "wedding"
+  ],
+  "random_chance_macro_f1": 0.07692307692307693,
+  "results": [
+    {
+      "model": "POPULARITY (no ML)",
+      "macro_f1": 0.055637287156833665,
+      "weighted_f1": 0.4097552669611623,
+      "top1": 0.56652,
+      "top3": 0.865,
+      "top5": 0.94579,
+      "dead_classes": 12,
+      "fit_seconds": null
+    },
+    {
+      "model": "RandomForest (Phase 2)",
+      "macro_f1": 0.11978687207089331,
+      "weighted_f1": 0.3414859466632599,
+      "top1": 0.30867,
+      "top3": 0.71455,
+      "top5": 0.83245,
+      "dead_classes": 1,
+      "fit_seconds": 20.5
+    },
+    {
+      "model": "HistGradientBoosting",
+      "macro_f1": 0.1221738472392826,
+      "weighted_f1": 0.3609487123781885,
+      "top1": 0.34132,
+      "top3": 0.79632,
+      "top5": 0.90738,
+      "dead_classes": 1,
+      "fit_seconds": 34.1
+    },
+    {
+      "model": "LogisticRegression",
+      "macro_f1": 0.10025614467297535,
+      "weighted_f1": 0.2687817715303138,
+      "top1": 0.23679,
+      "top3": 0.57047,
+      "top5": 0.69187,
+      "dead_classes": 0,
+      "fit_seconds": 6.7
+    },
+    {
+      "model": "XGBoost",
+      "macro_f1": 0.11824318587758663,
+      "weighted_f1": 0.35770112745279004,
+      "top1": 0.33918,
+      "top3": 0.79721,
+      "top5": 0.91065,
+      "dead_classes": 1,
+      "fit_seconds": 57.2
+    }
+  ],
+  "best_model": "HistGradientBoosting",
+  "collapse_experiment": {
+    "n_groups": 5,
+    "group_names": [
+      "BUSINESS",
+      "DEBT_RELIEF",
+      "DISCRETIONARY",
+      "HOME",
+      "LIFE_EVENT"
+    ],
+    "macro_f1": 0.2766319217348589,
+    "top1": 0.51385,
+    "lift_over_chance_5group": 1.3831596086742943,
+    "lift_over_chance_13class": 1.5882600141106737
+  }
+}

@@ -1,0 +1,30 @@
+# ============================================================================
+# SmartCross — the exact versions every number in this repo was produced with
+# ============================================================================
+# Python 3.12.4. Use this file to reproduce results exactly:
+#
+#   py -3.12 -m venv .venv
+#   .venv\Scripts\python -m pip install -r requirements-lock.txt
+#
+# requirements.txt (minimum versions) is enough to run the app; the served
+# model records the numpy / scikit-learn it was built with, and run.ps1
+# rebuilds it automatically if your environment differs.
+
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.4.2
+scipy==1.13.1
+joblib==1.4.2
+pyarrow==14.0.2
+imbalanced-learn==0.12.3
+xgboost==3.4.1
+matplotlib==3.8.4
+seaborn==0.13.2
+fastapi==0.161.0
+starlette==1.7.0
+uvicorn==0.54.0
+pydantic==2.14.0
+
+# explainer video (video/make_video.py) only
+pillow==10.3.0
+imageio-ffmpeg==0.6.0

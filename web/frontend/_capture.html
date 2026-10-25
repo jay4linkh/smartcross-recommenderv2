@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>capture</title>
+<style>html,body{margin:0;background:#14082b;overflow:hidden}iframe{border:0;width:1600px;height:1000px;display:block}</style>
+</head><body>
+<iframe id="f" src="/"></iframe>
+<script>
+/* Temporary helper for the explainer video: opens the console in a frame,
+   moves it to one view, and leaves it for a headless screenshot. */
+var q = new URLSearchParams(location.search);
+var f = document.getElementById("f");
+function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+f.addEventListener("load", async function () {
+  var w = f.contentWindow, d = w.document;
+  await wait(1500);
+  if (q.get("draw")) { d.getElementById("btn-random").click(); await wait(3000); }
+  if (q.get("view")) { d.querySelector("[data-view=" + q.get("view") + "]").click(); await wait(1500); }
+  if (q.get("node")) {
+    var n = Array.prototype.find.call(d.querySelectorAll("#flow .node"), function (x) {
+      return x.getAttribute("aria-label").indexOf(q.get("node")) === 0; });
+    if (n) n.dispatchEvent(new w.MouseEvent("click", { bubbles: true }));
+    await wait(500);
+  }
+  if (q.get("story")) {
+    var s = d.getElementById("story");
+    w.scrollTo(0, s.offsetTop + (s.offsetHeight - w.innerHeight) * parseFloat(q.get("story")));
+    await wait(1200);
+  }
+  if (q.get("el")) {
+    var e = d.querySelector(q.get("el"));
+    if (e) { e.scrollIntoView({ block: "start" }); w.scrollBy(0, parseInt(q.get("dy") || "0", 10)); }
+    await wait(800);
+  }
+});
+</script></body></html>

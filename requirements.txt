@@ -1,0 +1,28 @@
+# ============================================================================
+# SmartCross — exactly what the code imports, nothing it does not
+# ============================================================================
+#   pip install -r requirements.txt
+#
+# Pickles are not portable across major numpy / scikit-learn versions: build
+# the served model (web/backend/build_model.py) with the same Python that
+# serves it. web/run.ps1 checks this and rebuilds when needed.
+
+# Core
+numpy>=1.24
+pandas>=1.5
+scikit-learn>=1.2        # 1.2+ for HistGradientBoosting class_weight
+joblib>=1.1
+pyarrow>=10              # parquet split files in Part A
+
+# Part A (LendingClub) — rebalancing and the second boosted model
+imbalanced-learn>=0.10
+xgboost>=1.7             # optional in Part C; its row is omitted if absent
+
+# Charts for the report (scripts and defense/)
+matplotlib>=3.5
+seaborn>=0.11
+
+# Part C — the running service
+fastapi>=0.110
+uvicorn>=0.27
+pydantic>=2.0

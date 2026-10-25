@@ -1,0 +1,167 @@
+{
+  "phase": 4,
+  "n_classes": 13,
+  "class_names": [
+    "car",
+    "credit_card",
+    "debt_consolidation",
+    "home_improvement",
+    "house",
+    "major_purchase",
+    "medical",
+    "moving",
+    "other",
+    "renewable_energy",
+    "small_business",
+    "vacation",
+    "wedding"
+  ],
+  "random_chance_macro_f1": 0.07692307692307693,
+  "n_neighbors": 200,
+  "peer_pool": 150000,
+  "rarity_power": 0.5,
+  "best_alpha": 0.5,
+  "results": [
+    {
+      "model": "POPULARITY (no ML)",
+      "macro_f1": 0.055637287156833665,
+      "top1": 0.56652,
+      "top3": 0.865,
+      "top5": 0.94579,
+      "dead_classes": 12
+    },
+    {
+      "model": "CONTENT (HistGradientBoosting)",
+      "macro_f1": 0.1221738472392826,
+      "top1": 0.34132,
+      "top3": 0.79632,
+      "top5": 0.90738,
+      "dead_classes": 1
+    },
+    {
+      "model": "PEER CF (raw votes)",
+      "macro_f1": 0.05898233896914398,
+      "top1": 0.56832,
+      "top3": 0.88677,
+      "top5": 0.94493,
+      "dead_classes": 9
+    },
+    {
+      "model": "PEER CF (rarity-weighted)",
+      "macro_f1": 0.1024898312406346,
+      "top1": 0.55393,
+      "top3": 0.87391,
+      "top5": 0.9319,
+      "dead_classes": 2
+    },
+    {
+      "model": "HYBRID best (a=0.5)",
+      "macro_f1": 0.13366561185670972,
+      "top1": 0.47026,
+      "top3": 0.87354,
+      "top5": 0.94221,
+      "dead_classes": 2
+    }
+  ],
+  "alpha_sweep": [
+    {
+      "alpha": 0.0,
+      "model": "HYBRID a=0.0",
+      "macro_f1": 0.1024898312406346,
+      "top1": 0.55393,
+      "top3": 0.87391,
+      "top5": 0.9319,
+      "dead_classes": 2
+    },
+    {
+      "alpha": 0.1,
+      "model": "HYBRID a=0.1",
+      "macro_f1": 0.11027917853459906,
+      "top1": 0.54742,
+      "top3": 0.87801,
+      "top5": 0.93642,
+      "dead_classes": 4
+    },
+    {
+      "alpha": 0.2,
+      "model": "HYBRID a=0.2",
+      "macro_f1": 0.11958949930419788,
+      "top1": 0.53677,
+      "top3": 0.88036,
+      "top5": 0.93896,
+      "dead_classes": 4
+    },
+    {
+      "alpha": 0.3,
+      "model": "HYBRID a=0.3",
+      "macro_f1": 0.1285099236942365,
+      "top1": 0.52058,
+      "top3": 0.88005,
+      "top5": 0.94126,
+      "dead_classes": 3
+    },
+    {
+      "alpha": 0.4,
+      "model": "HYBRID a=0.4",
+      "macro_f1": 0.13213207228001528,
+      "top1": 0.4968,
+      "top3": 0.87822,
+      "top5": 0.94213,
+      "dead_classes": 2
+    },
+    {
+      "alpha": 0.5,
+      "model": "HYBRID a=0.5",
+      "macro_f1": 0.13366561185670972,
+      "top1": 0.47026,
+      "top3": 0.87354,
+      "top5": 0.94221,
+      "dead_classes": 2
+    },
+    {
+      "alpha": 0.6,
+      "model": "HYBRID a=0.6",
+      "macro_f1": 0.13288952610201532,
+      "top1": 0.44116,
+      "top3": 0.86543,
+      "top5": 0.94106,
+      "dead_classes": 1
+    },
+    {
+      "alpha": 0.7,
+      "model": "HYBRID a=0.7",
+      "macro_f1": 0.1307084586013885,
+      "top1": 0.41359,
+      "top3": 0.85375,
+      "top5": 0.93809,
+      "dead_classes": 1
+    },
+    {
+      "alpha": 0.8,
+      "model": "HYBRID a=0.8",
+      "macro_f1": 0.12856155246410625,
+      "top1": 0.38818,
+      "top3": 0.83827,
+      "top5": 0.93285,
+      "dead_classes": 1
+    },
+    {
+      "alpha": 0.9,
+      "model": "HYBRID a=0.9",
+      "macro_f1": 0.12553059579310294,
+      "top1": 0.36378,
+      "top3": 0.81902,
+      "top5": 0.92283,
+      "dead_classes": 1
+    },
+    {
+      "alpha": 1.0,
+      "model": "HYBRID a=1.0",
+      "macro_f1": 0.1221738472392826,
+      "top1": 0.34132,
+      "top3": 0.79632,
+      "top5": 0.90738,
+      "dead_classes": 1
+    }
+  ]
+}

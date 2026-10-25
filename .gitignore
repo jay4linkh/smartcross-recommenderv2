@@ -1,0 +1,28 @@
+# Large raw datasets - not versioned in git
+data/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.vscode/
+
+# Model artefacts - rebuild with build_model.py, never commit
+# (a pickle written under numpy 2.x cannot be read under numpy 1.x)
+model/
+*.pkl
+*.npz
+node_modules/
+.ipynb_checkpoints/
+
+# run logs from defense/ scripts (the results JSON and charts are kept)
+defense/*.log
+# the runnable data pack is committed; everything else under data/ stays out
+!data_pack/
+
+# video build scratch (frames, per-sentence audio) -- rebuilt by video/make_video.py
+video/build/
+
+# ...except the served model: collaborators run the app without retraining.
+# It is built with the versions in requirements-lock.txt; run.ps1 rebuilds on a mismatch.
+!web/backend/model/
+!web/backend/model/smartcross.pkl
